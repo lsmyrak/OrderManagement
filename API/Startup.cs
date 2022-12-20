@@ -30,18 +30,17 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
+            services.AddControllers();                 
             services.AddDbContext<OrderContext>(options => options
                 .UseNpgsql(Configuration.GetConnectionString("OrderPostgreSql")).UseSnakeCaseNamingConvention()
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                 .EnableSensitiveDataLogging());
-            services.AddDatabaseDeveloperPageExceptionFilter();           
-            services.AddSingleton<IMapper, Mapper>();
-            services.AddMediatR(typeof(Startup));
+            services.AddDatabaseDeveloperPageExceptionFilter();                     
+            //services.AddMediatR(typeof(Startup));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

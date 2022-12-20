@@ -2,7 +2,6 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System.IO;
 
 namespace API
 {
@@ -10,7 +9,7 @@ namespace API
     {
         public static void Main(string[] args)
         {
-            CreateWebHost(args).Run();                 
+            CreateWebHost(args).Run();
         }
 
         private static IWebHost CreateWebHost(string[] args)

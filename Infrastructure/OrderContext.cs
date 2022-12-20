@@ -9,14 +9,14 @@ namespace Infrastructure
 {
     public class OrderContext : DbContext
     {
-
+        public OrderContext()
+        {
+        }
         public OrderContext(DbContextOptions<OrderContext> options) : base(options)
         {
 
         }
-        public OrderContext()
-        {
-        }
+
 
         public DbSet<Order> Order { get; set; }
         public DbSet<Article> Article { get; set; }

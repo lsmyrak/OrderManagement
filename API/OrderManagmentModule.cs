@@ -2,29 +2,29 @@
 using API.Repositories;
 using API.Services;
 using Autofac;
-using Autofac.Core;
 using AutoMapper;
-using Domain.Model;
+using Infrastructure;
+using MediatR;
 
 namespace API
 {
-    public class OrderManagmentModule:Module
+    public class OrderManagmentModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             builder.Register<IConfigurationProvider>(ctx => new MapperConfiguration(cfg => cfg.AddMaps(typeof(OrderMapper)))).SingleInstance();
-            builder.Register<IMapper>(ctx => new Mapper(ctx.Resolve<IConfigurationProvider>(), ctx.Resolve)).InstancePerDependency();
-            
-            builder.RegisterType<OrderRepository>().As<IRepository<Order>>();
-            builder.RegisterType<OrderDetalisRepository>().As<IRepository<OrderDetalis>>();
-            builder.RegisterType<ArticleRepository>().As<IRepository<Article>>();
-            builder.RegisterType<ContractorRepository>().As<IRepository<Contractor>>();
+            builder.Register<IMapper>(ctx => new Mapper(ctx.Resolve<IConfigurationProvider>(), ctx.Resolve)).InstancePerDependency();      
+           
+            builder.RegisterType<OrderRepository>().AsImplementedInterfaces();
+            builder.RegisterType<OrderDetalisRepository>().AsImplementedInterfaces();
+            builder.RegisterType<ArticleRepository>().AsImplementedInterfaces();
+            builder.RegisterType<ContractorRepository>().AsImplementedInterfaces();
 
             builder.RegisterType<OrderService>().As<IOrderService>();
             builder.RegisterType<OrderDetalisService>().As<IOrderDetalisService>();
-
             builder.RegisterType<ArticleService>().As<IArticleService>();
             builder.RegisterType<ContractorService>().As<IContractorService>();
-        }           
+            builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
+        }
     }
 }
