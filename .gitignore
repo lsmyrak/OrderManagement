@@ -1,0 +1,14 @@
+﻿Contracts/bin
+Domain/bin
+Infrastructure/bin
+RestAPI/obj
+Infrastructure/obj
+Domain/obj
+Contracts/obj
+.vs/OrderManagement/config
+.vs/OrderManagement/DesignTimeBuild
+.vs/OrderManagement/FileContentIndex
+.vs/ProjectEvaluation
+API/bin
+API/obj
+.vs
