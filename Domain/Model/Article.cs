@@ -9,7 +9,7 @@ namespace Domain.Model
         public decimal NettoPrice { get; set; }
         public decimal GrossPrice { get; set; }
         public int Tax { get; set; }
-        public List<OrderDetalis> OrderDetalis { get; set; } = new List<OrderDetalis>();
+        public List<OrderDetalis>? OrderDetalis { get; set; } = new List<OrderDetalis>();
 
 
     }

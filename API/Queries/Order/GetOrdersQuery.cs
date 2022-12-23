@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Queries
+namespace API.Queries.Order
 {
     public class GetOrdersQuery : IRequest<IEnumerable<OrderDto>>
     {
@@ -25,7 +25,7 @@ namespace API.Queries
             var list = new List<OrderDto>();
             try
             {
-                return await _orderService.GetAll();
+                return await _orderService.GetAll(cancellationToken);
             }
             catch
             {
@@ -33,7 +33,7 @@ namespace API.Queries
             }
             finally
             {
-                
+
             }
             return list;
         }

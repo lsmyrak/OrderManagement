@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API.Repositories
@@ -18,46 +19,46 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id,CancellationToken cancellationToken)
         {
             var orderDetalis = await _context.OrderDetalis.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
             if (orderDetalis != null)
             {
                 _context.OrderDetalis.Remove(orderDetalis);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public async Task<OrderDetalis> Get(int id)
+        public async Task<OrderDetalis> Get(int id,CancellationToken cancellationToken)
         {
-            return await _context.OrderDetalis.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            return await _context.OrderDetalis.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false,cancellationToken);
         }
 
-        public async Task<IEnumerable<OrderDetalis>> GetAll()
+        public async Task<IEnumerable<OrderDetalis>> GetAll(CancellationToken cancellationToken)
         {
-            return await _context.OrderDetalis.Where(x => x.IsDeleted == false).ToArrayAsync();
+            return await _context.OrderDetalis.Where(x => x.IsDeleted == false).ToArrayAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<OrderDetalis>> GetByFilter(Expression<Func<OrderDetalis, bool>> predycate)
+        public async Task<IEnumerable<OrderDetalis>> GetByFilter(Expression<Func<OrderDetalis, bool>> predycate, CancellationToken cancellationToken)
         {
             var orderdetalisList = _context.OrderDetalis.Where(x => x.IsDeleted == false);
             if (predycate != null)
             {
                 orderdetalisList = orderdetalisList.Where(predycate);
             }
-            return await orderdetalisList.ToArrayAsync();
+            return await orderdetalisList.ToArrayAsync(cancellationToken);
         }
 
-        public async Task Insert(OrderDetalis entity)
+        public async Task Insert(OrderDetalis entity, CancellationToken cancellationToken)
         {
             _context.OrderDetalis.Add(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task Update(OrderDetalis entity)
+        public async Task Update(OrderDetalis entity, CancellationToken cancellationToken)
         {
             _context.OrderDetalis.Update(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

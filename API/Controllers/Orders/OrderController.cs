@@ -1,4 +1,5 @@
 ﻿using API.Queries;
+using API.Queries.Order;
 using Contracts.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace API.Controllers.Orders
         }
 
         [HttpGet]
-        public async Task<IEnumerable<OrderDto>> GetOrder()
+        public async Task<IEnumerable<OrderDto>> Orders()
 
         => await _mediator.Send(new GetOrdersQuery());
     }

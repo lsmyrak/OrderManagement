@@ -35,8 +35,8 @@ namespace API
                 .UseNpgsql(Configuration.GetConnectionString("OrderPostgreSql")).UseSnakeCaseNamingConvention()
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                 .EnableSensitiveDataLogging());
-            services.AddDatabaseDeveloperPageExceptionFilter();                     
-            //services.AddMediatR(typeof(Startup));
+            services.AddDatabaseDeveloperPageExceptionFilter();
+           services.AddMediatR(typeof(Startup));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });

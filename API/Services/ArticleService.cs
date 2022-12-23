@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API.Services
@@ -13,7 +14,7 @@ namespace API.Services
     public class ArticleService : IArticleService
     {
         private readonly IRepository<Article> _articleRepository;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public ArticleService(IRepository<Article> articleRepository, IMapper mapper)
         {
@@ -21,38 +22,38 @@ namespace API.Services
             _mapper = mapper;
         }
 
-        public async Task Add(ArticleDto articleDto)
+        public async Task Add(ArticleDto articleDto, CancellationToken cancellationToken)
         {
             await _articleRepository.Insert(_mapper.Map<Article>(articleDto));
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
-            await _articleRepository.Delete(id);
+            await _articleRepository.Delete(id, cancellationToken);
         }
 
-        public async Task<ArticleDto> Get(int id)
+        public async Task<ArticleDto> Get(int id, CancellationToken cancellationToken)
         {
-            var article = await _articleRepository.Get(id);
+            var article = await _articleRepository.Get(id, cancellationToken);
             return _mapper.Map<ArticleDto>(article);
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetAll()
+        public async Task<IEnumerable<ArticleDto>> GetAll(CancellationToken cancellationToken)
         {
-            var articles = await _articleRepository.GetAll();
+            var articles = await _articleRepository.GetAll(cancellationToken);
             return articles.Select(x => _mapper.Map<ArticleDto>(x));
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetBy(Expression<Func<Article, bool>> predycate)
+        public async Task<IEnumerable<ArticleDto>> GetBy(Expression<Func<Article, bool>> predycate, CancellationToken cancellationToken)
         {
-            var articles = await _articleRepository.GetByFilter(predycate);
+            var articles = await _articleRepository.GetByFilter(predycate,cancellationToken);
             return articles.Select(x => _mapper.Map<ArticleDto>(x));
         }
 
-        public async Task Update(ArticleDto articleDto)
+        public async Task Update(ArticleDto articleDto,CancellationToken cancellationToken)
         {
             var article = _mapper.Map<Article>(articleDto);
-            await _articleRepository.Update(article);
+            await _articleRepository.Update(article,cancellationToken);
         }
     }
 }

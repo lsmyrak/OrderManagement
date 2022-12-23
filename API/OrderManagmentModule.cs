@@ -23,8 +23,7 @@ namespace API
             builder.RegisterType<OrderService>().As<IOrderService>();
             builder.RegisterType<OrderDetalisService>().As<IOrderDetalisService>();
             builder.RegisterType<ArticleService>().As<IArticleService>();
-            builder.RegisterType<ContractorService>().As<IContractorService>();
-            builder.RegisterType<Mediator>().As<IMediator>().SingleInstance();
+            builder.RegisterType<ContractorService>().As<IContractorService>();           
         }
     }
 }

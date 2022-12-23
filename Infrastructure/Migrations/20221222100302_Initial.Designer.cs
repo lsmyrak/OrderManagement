@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20221220162255_Initial")]
+    [Migration("20221222100302_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,38 +26,49 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("create_date");
 
                     b.Property<decimal>("GrossPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("gross_price");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<decimal>("NettoPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("netto_price");
 
                     b.Property<int>("Tax")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("tax");
 
                     b.Property<string>("UpdateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
 
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("update_date");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_article");
 
-                    b.ToTable("Article");
+                    b.ToTable("article");
                 });
 
             modelBuilder.Entity("Domain.Model.Contractor", b =>
@@ -65,38 +76,49 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("City")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("city");
 
                     b.Property<string>("CreateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("create_date");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<string>("NumberHome")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("number_home");
 
                     b.Property<string>("UpdateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
 
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("update_date");
 
                     b.Property<string>("ZipCode")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("zip_code");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_contractor");
 
-                    b.ToTable("Contractor");
+                    b.ToTable("contractor");
                 });
 
             modelBuilder.Entity("Domain.Model.Order", b =>
@@ -104,43 +126,56 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<int>("ContractorId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("contractor_id");
 
                     b.Property<string>("CreateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("create_date");
 
                     b.Property<decimal>("GrossPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("gross_price");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<decimal>("NettoPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("netto_price");
 
                     b.Property<Guid>("Number")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("number");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("order_date");
 
                     b.Property<string>("UpdateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
 
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("update_date");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_order");
 
-                    b.HasIndex("ContractorId");
+                    b.HasIndex("ContractorId")
+                        .HasDatabaseName("ix_order_contractor_id");
 
-                    b.ToTable("Order");
+                    b.ToTable("order");
                 });
 
             modelBuilder.Entity("Domain.Model.OrderDetalis", b =>
@@ -148,45 +183,59 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<int>("ArticleId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("article_id");
 
                     b.Property<int>("Count")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("count");
 
                     b.Property<string>("CreateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("create_date");
 
                     b.Property<decimal>("GrossPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("gross_price");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<decimal>("NettoPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("netto_price");
 
                     b.Property<int?>("OrderId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("order_id");
 
                     b.Property<string>("UpdateBy")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
 
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("update_date");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_order_detalis");
 
-                    b.HasIndex("ArticleId");
+                    b.HasIndex("ArticleId")
+                        .HasDatabaseName("ix_order_detalis_article_id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_order_detalis_order_id");
 
-                    b.ToTable("OrderDetalis");
+                    b.ToTable("order_detalis");
                 });
 
             modelBuilder.Entity("Domain.Model.Order", b =>
@@ -194,6 +243,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Model.Contractor", "Contractor")
                         .WithMany("Orders")
                         .HasForeignKey("ContractorId")
+                        .HasConstraintName("fk_order_contractor_contractor_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -205,12 +255,14 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Model.Article", "Article")
                         .WithMany("OrderDetalis")
                         .HasForeignKey("ArticleId")
+                        .HasConstraintName("fk_order_detalis_article_article_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Model.Order", "Order")
                         .WithMany("OrderDetalis")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .HasConstraintName("fk_order_detalis_order_order_id");
 
                     b.Navigation("Article");
 

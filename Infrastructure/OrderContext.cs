@@ -49,7 +49,8 @@ namespace Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Server=192.168.250.50; Port=5432; Database=Hades; Id=postgres;Password='Immolation@138'");
+            optionsBuilder.UseNpgsql("User ID =postgres;Password=Immolation@138;Server=192.168.250.50;Port=5432;Database=Hades;Integrated Security=true;Pooling=true;")
+                .UseSnakeCaseNamingConvention();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

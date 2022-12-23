@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.ExceptionServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API.Repositories
@@ -17,9 +19,9 @@ namespace API.Repositories
         {
             _context = context;
         }
-        public async Task<Article> Get(int id)
+        public async Task<Article> Get(int id, CancellationToken cancellationToken)
         {
-            var article = await _context.Article.FirstOrDefaultAsync(x => x.Id == id);
+            var article = await _context.Article.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted==false , cancellationToken);
             if (article == null)
             {
                 return new Article();
@@ -27,39 +29,40 @@ namespace API.Repositories
             return article;
         }
 
-        public async Task<IEnumerable<Article>> GetAll()
+        public async Task<IEnumerable<Article>> GetAll(CancellationToken cancellationToken)
         {
-            return await _context.Article.Where(x => x.IsDeleted == false).ToArrayAsync();
+            return await _context.Article.Where(x => x.IsDeleted == false).ToArrayAsync(cancellationToken);
         }
 
-        public async Task Insert(Article entity)
+        public async Task Insert(Article entity, CancellationToken cancellationToken)
         {
             _context.Article.Add(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
             var article = await _context.Article.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
             if (article != null)
             {
                 _context.Article.Remove(article);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public async Task Update(Article entity)
+        public async Task Update(Article entity, CancellationToken cancellationToken)
         {
             _context.Article.Update(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
+
         }
 
-        public async Task<IEnumerable<Article>> GetByFilter(Expression<Func<Article, bool>> predycate)
+        public async Task<IEnumerable<Article>> GetByFilter(Expression<Func<Article, bool>> predycate, CancellationToken cancellationToken)
         {
             var articles = new List<Article>();
             try
             {
-                articles = await _context.Article.Where(x => x.IsDeleted == false).ToListAsync();                       
+                articles = await _context.Article.Where(x => x.IsDeleted == false).ToListAsync(cancellationToken);
             }
             catch (Exception e)
             {
@@ -70,7 +73,7 @@ namespace API.Repositories
                 var cc = articles.AsQueryable<Article>();
                 cc.Where(predycate);
 
-                return await cc.ToListAsync<Article>();
+                return await cc.ToListAsync<Article>(cancellationToken);
             }
             return articles;
         }
