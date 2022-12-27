@@ -57,7 +57,7 @@ namespace API.Repositories
 
         }
 
-        public async Task<IEnumerable<Article>> GetByFilter(Expression<Func<Article, bool>> predycate, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Article>> GetBy(Expression<Func<Article, bool>> predycate, CancellationToken cancellationToken)
         {
             var articles = new List<Article>();
             try

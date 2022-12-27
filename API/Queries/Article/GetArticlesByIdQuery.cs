@@ -1,4 +1,4 @@
-﻿using API.Services;
+﻿using API.Services.Interfaces;
 using Contracts.Dtos;
 using MediatR;
 using System.Collections.Generic;

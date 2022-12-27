@@ -23,10 +23,28 @@ namespace API.Controllers.Article
             _mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<ArticleDto>> Articles()
+        {
+            return await _mediator.Send(new GetArticlesQuery());
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ArticleDto> ArticleById(int id)
+        {
+            return await _mediator.Send(new GetArticlesByIdQuery(id));
+        }
+
+        [HttpGet("filtr/{filtr}")]
+        public async Task<IEnumerable<ArticleDto>> ArticleByFiltr(string filtr)
+        {
+            return await _mediator.Send(new GetArticlesByFilterQuery(filtr));
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> AddArticle(ArticleDto articleDto)
         {
-
             var command = new AddArticleCommand(articleDto);
             await _mediator.Send(command);
             return NoContent();
@@ -38,16 +56,6 @@ namespace API.Controllers.Article
             var command = new UpdateArticleCommand(articleDto);
             await _mediator.Send(command);
             return NoContent();
-        }
-        [HttpGet]
-        public async Task<IEnumerable<ArticleDto>> Articles()
-        {
-            return await _mediator.Send(new GetArticlesQuery());
-        }
-        [HttpGet("{id}")]
-        public async Task<ArticleDto> Article(int id)
-        {
-            return await _mediator.Send(new GetArticlesByIdQuery(id));
         }
 
         [HttpDelete("{id}")]

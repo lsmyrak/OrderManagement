@@ -46,7 +46,7 @@ namespace API.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Order>> GetByFilter(Expression<Func<Order, bool>> predycate,CancellationToken cancellationToken)
+        public async Task<IEnumerable<Order>> GetBy(Expression<Func<Order, bool>> predycate,CancellationToken cancellationToken)
         {
             var orders = _context.Order.Where(x => x.IsDeleted == false);
             if (predycate != null)

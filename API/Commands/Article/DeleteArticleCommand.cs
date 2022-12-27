@@ -1,4 +1,4 @@
-﻿using API.Services;
+﻿using API.Services.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

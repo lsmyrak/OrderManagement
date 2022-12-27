@@ -41,7 +41,7 @@ namespace Infrastructure
 
                     case EntityState.Modified:
                         entry.Entity.UpdateBy = "2";
-                        entry.Entity.UpdateDate = DateTime.Now;
+                        entry.Entity.UpdateDate = DateTime.Now;                        
                         break;
                 }
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);

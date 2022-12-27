@@ -43,7 +43,7 @@ namespace API.Repositories
             return await _context.Contractor.Where(x => x.IsDeleted == false).ToArrayAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Contractor>> GetByFilter(Expression<Func<Contractor, bool>> predycate, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Contractor>> GetBy(Expression<Func<Contractor, bool>> predycate, CancellationToken cancellationToken)
         {
             var contractors = _context.Contractor.Where(x => x.IsDeleted == false);
 

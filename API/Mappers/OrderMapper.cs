@@ -11,8 +11,7 @@ namespace API.Mappers
         public OrderMapper()
         {
             CreateMap<Order, OrderDto>();
-            CreateMap<OrderDto, Order>();
-           // .ForMember(src=>src.CreateDate,dest=>dest.MapFrom<Order>(d=>d.));
+            CreateMap<OrderDto, Order>();         
           
             CreateMap<Article, ArticleDto>();
             CreateMap<ArticleDto, Article>();

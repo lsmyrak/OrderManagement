@@ -1,6 +1,7 @@
 ﻿using API.Mappers;
 using API.Repositories;
 using API.Services;
+using API.Services.Interfaces;
 using Autofac;
 using AutoMapper;
 using Infrastructure;

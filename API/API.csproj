@@ -38,12 +38,4 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\Contractor\" />
-    <Folder Include="Commands\OrderDetalis\" />
-    <Folder Include="Commands\Order\" />
-    <Folder Include="Queries\Contractor\" />
-    <Folder Include="Queries\OrderDetalis\" />
-  </ItemGroup>
-
 </Project>

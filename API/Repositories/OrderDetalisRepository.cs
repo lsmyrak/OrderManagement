@@ -39,7 +39,7 @@ namespace API.Repositories
             return await _context.OrderDetalis.Where(x => x.IsDeleted == false).ToArrayAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<OrderDetalis>> GetByFilter(Expression<Func<OrderDetalis, bool>> predycate, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OrderDetalis>> GetBy(Expression<Func<OrderDetalis, bool>> predycate, CancellationToken cancellationToken)
         {
             var orderdetalisList = _context.OrderDetalis.Where(x => x.IsDeleted == false);
             if (predycate != null)

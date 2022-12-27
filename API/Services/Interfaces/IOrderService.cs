@@ -3,11 +3,12 @@ using Contracts.Dtos;
 using Domain.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Services
+namespace API.Services.Interfaces
 {
     public interface IOrderService
     {
@@ -15,8 +16,10 @@ namespace API.Services
         public Task<OrderDto> Get(int id, CancellationToken cancellationToken);
         public Task<IEnumerable<OrderDto>> GetAll(CancellationToken cancellationToken);
         public Task Delete(int id, CancellationToken cancellationToken);
-        public Task Update(OrderDto orderDto, CancellationToken cancellationToken);   
-        
-        public Task<IEnumerable<OrderDto>> GetBy(Expression<Func<Order,bool>> predycate, CancellationToken cancellationToken);
+        public Task Update(OrderDto orderDto, CancellationToken cancellationToken);
+
+        public Task<IEnumerable<OrderDto>> GetBy(Expression<Func<Order, bool>> predycate, CancellationToken cancellationToken);
+
+        public Task<IEnumerable<Order>> GetByFilter(string filter, CancellationToken cancellationToken);
     }
 }

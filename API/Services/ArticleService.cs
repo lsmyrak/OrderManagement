@@ -1,4 +1,5 @@
 ﻿using API.Repositories;
+using API.Services.Interfaces;
 using AutoMapper;
 using Contracts.Dtos;
 using Domain.Model;
@@ -46,13 +47,29 @@ namespace API.Services
 
         public async Task<IEnumerable<ArticleDto>> GetBy(Expression<Func<Article, bool>> predycate, CancellationToken cancellationToken)
         {
-            var articles = await _articleRepository.GetByFilter(predycate,cancellationToken);
+            var articles = await _articleRepository.GetBy(predycate,cancellationToken);
             return articles.Select(x => _mapper.Map<ArticleDto>(x));
+        }
+
+        public async Task<IEnumerable<ArticleDto>> GetByFilter(string filter,CancellationToken cancellationToken)
+        {
+            var articles = await _articleRepository.GetAll(cancellationToken);
+           
+            var searchArticles = articles
+                .Where(x => x.Name.Contains(filter)
+                || x.NettoPrice.ToString().Contains(filter)
+                || x.GrossPrice.ToString().Contains(filter)
+                || x.Tax.ToString().Contains(filter));
+            
+            return searchArticles.Select(x=>_mapper.Map<ArticleDto>(x));
+
         }
 
         public async Task Update(ArticleDto articleDto,CancellationToken cancellationToken)
         {
-            var article = _mapper.Map<Article>(articleDto);
+
+            var articleSrc = await _articleRepository.Get(articleDto.Id, cancellationToken);
+            var article = _mapper.Map<ArticleDto,Article>(articleDto,articleSrc);
             await _articleRepository.Update(article,cancellationToken);
         }
     }
