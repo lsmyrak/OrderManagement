@@ -17,7 +17,7 @@ namespace API.Mappers
             CreateMap<ArticleDto, Article>();
 
             CreateMap<Contractor, ContractorDto>();
-            CreateMap<ContractorDto, ContractorDto>();
+            CreateMap<ContractorDto, Contractor>();
 
             CreateMap<OrderDetalis, OrderDetalisDto>();
             CreateMap<OrderDetalisDto, OrderDetalis>();
