@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.ExceptionServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +20,7 @@ namespace API.Repositories
         }
         public async Task<Article> Get(int id, CancellationToken cancellationToken)
         {
-            var article = await _context.Article.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted==false , cancellationToken);
+            var article = await _context.Article.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false, cancellationToken);
             if (article == null)
             {
                 return new Article();

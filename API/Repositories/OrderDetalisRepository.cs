@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task Delete(int id,CancellationToken cancellationToken)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
             var orderDetalis = await _context.OrderDetalis.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
             if (orderDetalis != null)
@@ -29,9 +28,9 @@ namespace API.Repositories
             }
         }
 
-        public async Task<OrderDetalis> Get(int id,CancellationToken cancellationToken)
+        public async Task<OrderDetalis> Get(int id, CancellationToken cancellationToken)
         {
-            return await _context.OrderDetalis.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false,cancellationToken);
+            return await _context.OrderDetalis.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false, cancellationToken);
         }
 
         public async Task<IEnumerable<OrderDetalis>> GetAll(CancellationToken cancellationToken)

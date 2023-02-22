@@ -1,6 +1,6 @@
 ﻿namespace Contracts.Dtos
 {
-    public class OrderDetalisDto :BaseDto
+    public class OrderDetalisDto : BaseDto
     {
         public int Count { get; set; }
         public decimal GrossPrice { get; set; }

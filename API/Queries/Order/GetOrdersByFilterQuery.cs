@@ -1,16 +1,18 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Queries.Order
+namespace API.Queries
 {
-    public class GetOrdersByFilterQuery:IRequest<IEnumerable<OrderDto>>
+    public class GetOrdersByFilterQuery : IRequest<IEnumerable<OrderDto>>
     {
-        public string  Filter { get; set; }
+        public string Filter { get; set; }
         public GetOrdersByFilterQuery(string filter)
         {
             Filter = filter;
@@ -18,14 +20,19 @@ namespace API.Queries.Order
     }
     public class GetOrdersByFilterQueryHandler : IRequestHandler<GetOrdersByFilterQuery, IEnumerable<OrderDto>>
     {
-        private readonly IOrderService _orderService;
-        public GetOrdersByFilterQueryHandler(IOrderService orderService)
+        private readonly IRepository<Order> _orderRepository;
+        private readonly IMapper _mapper;
+        public GetOrdersByFilterQueryHandler(IRepository<Order> orderRepository, IMapper mapper)
         {
-            _orderService = orderService;
+            _orderRepository = orderRepository;
+            _mapper = mapper;
         }
-        public async Task<IEnumerable<OrderDto>> Handle(GetOrdersByFilterQuery request, CancellationToken cancellationToken)            
+        public async Task<IEnumerable<OrderDto>> Handle(GetOrdersByFilterQuery request, CancellationToken cancellationToken)
         {
-            return null;
+            var orders = await _orderRepository.GetBy(x => x.OrderDate.ToString().Contains(request.Filter)
+             || x.Contractor.Name.Contains(request.Filter) || x.Number.ToString().Contains(request.Filter), cancellationToken);
+
+            return orders.Select(x => _mapper.Map<OrderDto>(x));
         }
     }
 }

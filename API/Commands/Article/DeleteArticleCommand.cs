@@ -1,9 +1,11 @@
-﻿using API.Services.Interfaces;
+﻿
+using API.Repositories;
+using Domain.Model;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Commands.Article
+namespace API.Commands
 {
     public class DeleteArticleCommand : IRequest
     {
@@ -16,15 +18,15 @@ namespace API.Commands.Article
 
     public class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand>
     {
-        private readonly IArticleService _articleSevice;
-        public DeleteArticleCommandHandler(IArticleService articleSevice)
+        private readonly IRepository<Article> _articleRepository;
+        public DeleteArticleCommandHandler(IRepository<Article> articleRepository)
         {
-            _articleSevice = articleSevice;
+            _articleRepository = articleRepository;
         }
 
         public async Task<Unit> Handle(DeleteArticleCommand request, CancellationToken cancellationToken)
         {
-            await _articleSevice.Delete(request.Id, cancellationToken);
+            await _articleRepository.Delete(request.Id, cancellationToken);
             return Unit.Value;
         }
     }

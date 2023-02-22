@@ -1,11 +1,12 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using Domain.Model;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Commands.Order
+namespace API.Commands
 {
-    public class DeleteOrderCommand:IRequest<int>
+    public class DeleteOrderCommand : IRequest<int>
     {
         public int Id { get; set; }
         public DeleteOrderCommand(int id)
@@ -15,15 +16,15 @@ namespace API.Commands.Order
     }
     public class DeleteOrdercommandHandler : IRequestHandler<DeleteOrderCommand, int>
     {
-        private readonly IOrderService _orderService;
-        public DeleteOrdercommandHandler(IOrderService orderService)
+        private readonly IRepository<Order> _orderRepository;
+        public DeleteOrdercommandHandler(IRepository<Order> orderRepository)
         {
-            _orderService = orderService;
+            _orderRepository = orderRepository;
         }
 
         public async Task<int> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
-            await _orderService.Delete(request.Id, cancellationToken);
+            await _orderRepository.Delete(request.Id, cancellationToken);
             return 0;
         }
     }

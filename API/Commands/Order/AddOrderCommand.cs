@@ -1,13 +1,14 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Commands.Order
+namespace API.Commands
 {
-    public class AddOrderCommand:IRequest<int>
+    public class AddOrderCommand : IRequest<int>
     {
         public OrderDto order { get; set; }
         public AddOrderCommand(OrderDto orderDto)
@@ -17,16 +18,18 @@ namespace API.Commands.Order
     }
     public class AddOrderCommandHandler : IRequestHandler<AddOrderCommand, int>
     {
-        private readonly IOrderService _orderService;
+        private readonly IRepository<Order> _orderRepository;
+        private readonly IMapper _mapper;
 
-        public AddOrderCommandHandler(IOrderService orderService)
+        public AddOrderCommandHandler(IRepository<Order> orderRepository, IMapper mapper)
         {
-            _orderService = orderService;
+            _orderRepository = orderRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> Handle(AddOrderCommand request, CancellationToken cancellationToken)
         {
-            await _orderService.Add(request.order,cancellationToken);
+            await _orderRepository.Insert(_mapper.Map<Order>(request.order), cancellationToken);
             return 0;
         }
     }

@@ -19,7 +19,7 @@ namespace API.Repositories
         }
         public async Task<Order> Get(int id, CancellationToken cancellationToken)
         {
-            return await _context.Order.FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
+            return await _context.Order.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<IEnumerable<Order>> GetAll(CancellationToken cancellationToken)
@@ -27,26 +27,26 @@ namespace API.Repositories
             return await _context.Order.Where(x => x.IsDeleted == false).ToListAsync(cancellationToken);
         }
 
-        public async Task Insert(Order entity,CancellationToken cancellationToken)
+        public async Task Insert(Order entity, CancellationToken cancellationToken)
         {
             _context.Order.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task Delete(int id,CancellationToken cancellationToken)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
             var order = _context.Order.FirstOrDefault(x => x.Id == id);
             _context.Order.Remove(order);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task Update(Order entity,CancellationToken cancellationToken)
+        public async Task Update(Order entity, CancellationToken cancellationToken)
         {
             _context.Order.Update(entity);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Order>> GetBy(Expression<Func<Order, bool>> predycate,CancellationToken cancellationToken)
+        public async Task<IEnumerable<Order>> GetBy(Expression<Func<Order, bool>> predycate, CancellationToken cancellationToken)
         {
             var orders = _context.Order.Where(x => x.IsDeleted == false);
             if (predycate != null)

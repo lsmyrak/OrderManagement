@@ -1,13 +1,14 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Commands.Contractor
+namespace API.Commands
 {
-    public class AddContractorCommand:IRequest<int>
+    public class AddContractorCommand : IRequest<int>
     {
         public ContractorDto Model { get; set; }
 
@@ -18,15 +19,18 @@ namespace API.Commands.Contractor
     }
     public class AddContractorCommandHandler : IRequestHandler<AddContractorCommand, int>
     {
-        private readonly IContractorService _contractorService;
-        public AddContractorCommandHandler(IContractorService contractorService)
+        private readonly IRepository<Contractor> _contractorRepository;
+        private readonly IMapper _mapper;
+
+        public AddContractorCommandHandler(IRepository<Contractor> contractorRepository, IMapper mapper)
         {
-            _contractorService = contractorService;
+            _contractorRepository = contractorRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> Handle(AddContractorCommand request, CancellationToken cancellationToken)
         {
-            await _contractorService.Add(request.Model,cancellationToken);
+            await _contractorRepository.Insert(_mapper.Map<Contractor>(request.Model), cancellationToken);
             return 0;
         }
     }

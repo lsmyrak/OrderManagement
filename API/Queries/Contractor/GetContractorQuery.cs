@@ -1,11 +1,14 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Queries.Contractor
+namespace API.Queries
 {
     public class GetContractorQuery : IRequest<IEnumerable<ContractorDto>>
     {
@@ -14,16 +17,19 @@ namespace API.Queries.Contractor
 
     public class GetContractorQueryHandler : IRequestHandler<GetContractorQuery, IEnumerable<ContractorDto>>
     {
-        private readonly IContractorService _contractorService;
+        private readonly IRepository<Contractor> _contractorRepository;
+        private readonly IMapper _mapper;
 
-        public GetContractorQueryHandler(IContractorService contractorService)
+        public GetContractorQueryHandler(IRepository<Contractor> contractorRepository, IMapper mapper)
         {
-            _contractorService = contractorService;
+            _contractorRepository = contractorRepository;
+            _mapper = mapper;
         }
 
-        public async  Task<IEnumerable<ContractorDto>> Handle(GetContractorQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ContractorDto>> Handle(GetContractorQuery request, CancellationToken cancellationToken)
         {
-            return await _contractorService.GetAll(cancellationToken);
+            var contractor = await _contractorRepository.GetAll(cancellationToken);
+            return contractor.Select(x => _mapper.Map<ContractorDto>(x));
         }
     }
 }

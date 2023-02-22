@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Contracts.Dtos
 {
-    public class OrderDto :BaseDto
+    public class OrderDto : BaseDto
     {
         public Guid Number { get; set; } = Guid.NewGuid();
         public DateTime OrderDate { get; set; } = DateTime.Now;

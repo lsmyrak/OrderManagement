@@ -1,5 +1,5 @@
 using Autofac;
-using AutoMapper;
+using Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System.IO;
-using System.Reflection;
-using System;
-using System.Linq;
 using Microsoft.Extensions.Logging;
-using Infrastructure;
+using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace API
 {
@@ -30,13 +29,13 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();                 
+            services.AddControllers();
             services.AddDbContext<OrderContext>(options => options
                 .UseNpgsql(Configuration.GetConnectionString("OrderPostgreSql")).UseSnakeCaseNamingConvention()
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                 .EnableSensitiveDataLogging());
             services.AddDatabaseDeveloperPageExceptionFilter();
-           services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(Startup));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -55,8 +54,8 @@ namespace API
                 builder.RegisterAssemblyModules(assembly);
             }
         }
-            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -71,7 +70,7 @@ namespace API
 
             app.UseAuthorization();
 
-          
+
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,13 +1,12 @@
-﻿using API.Commands.Contractor;
-using API.Commands.Order;
-using API.Queries.Order;
+﻿using API.Commands;
+using API.Queries;
 using Contracts.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace API.Controllers.Orders
+namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,9 +28,9 @@ namespace API.Controllers.Orders
         public async Task<OrderDto> Order(int id)
             => await _mediator.Send(new GetOrderByIdQuery(id));
 
-        [HttpGet("filtr/{filtr}")]
-        public async Task<IEnumerable<OrderDto>> OrdersFiltr(string filtr)
-          => await _mediator.Send(new GetOrdersByFilterQuery(filtr));
+        [HttpGet("{filter}")]
+        public async Task<IEnumerable<OrderDto>> OrdersFiltr(string filter)
+          => await _mediator.Send(new GetOrdersByFilterQuery(filter));
 
         [HttpPost]
         public async Task<ActionResult> AddOrder(OrderDto orderDto)
@@ -46,7 +45,7 @@ namespace API.Controllers.Orders
             await _mediator.Send(new UpdateOrderCommand(orderDto));
             return NoContent();
         }
-        
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteOrder(int id)
         {

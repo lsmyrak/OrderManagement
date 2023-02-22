@@ -1,16 +1,12 @@
 ﻿using API.Commands;
-using API.Commands.Article;
-using API.Queries.Article;
-using API.Queries.Order;
+using API.Queries;
 using Contracts.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace API.Controllers.Article
+namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -28,7 +24,7 @@ namespace API.Controllers.Article
         {
             return await _mediator.Send(new GetArticlesQuery());
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ArticleDto> ArticleById(int id)
         {

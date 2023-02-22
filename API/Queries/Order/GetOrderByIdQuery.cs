@@ -1,16 +1,16 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Queries.Order
+namespace API.Queries
 {
-    public class GetOrderByIdQuery:IRequest<OrderDto>
+    public class GetOrderByIdQuery : IRequest<OrderDto>
     {
-        public int Id { get; set;}
+        public int Id { get; set; }
 
         public GetOrderByIdQuery(int id)
         {
@@ -20,16 +20,18 @@ namespace API.Queries.Order
 
     public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrderDto>
     {
-        private readonly IOrderService _orderService;
+        private readonly IRepository<Order> _orderRepository;
+        private readonly IMapper _mapper;
 
-        public GetOrderByIdQueryHandler(IOrderService orderService)
+        public GetOrderByIdQueryHandler(IRepository<Order> orderRepository, IMapper mapper)
         {
-            _orderService = orderService;
+            _orderRepository = orderRepository;
+            _mapper = mapper;
         }
 
         public async Task<OrderDto> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _orderService.Get(request.Id, cancellationToken);
+            return _mapper.Map<OrderDto>(await _orderRepository.Get(request.Id, cancellationToken));
         }
     }
 

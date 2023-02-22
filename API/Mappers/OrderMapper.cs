@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Contracts.Dtos;
 using Domain.Model;
-using Microsoft.AspNetCore.Routing.Constraints;
-using System.Collections.Generic;
 
 namespace API.Mappers
 {
@@ -11,8 +9,8 @@ namespace API.Mappers
         public OrderMapper()
         {
             CreateMap<Order, OrderDto>();
-            CreateMap<OrderDto, Order>();         
-          
+            CreateMap<OrderDto, Order>();
+
             CreateMap<Article, ArticleDto>();
             CreateMap<ArticleDto, Article>();
 

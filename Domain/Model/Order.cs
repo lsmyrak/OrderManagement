@@ -6,12 +6,17 @@ namespace Domain.Model
 {
     public class Order : BaseEntity
     {
-        public Guid Number { get; set; } = Guid.NewGuid();
-        public DateTime OrderDate { get; set; } = DateTime.Now;
-        public decimal NettoPrice { get; set; }
-        public decimal GrossPrice { get; set; }
-        public Contractor Contractor { get; set; }
-        public int ContractorId { get; set; }
-        public virtual List<OrderDetalis> OrderDetalis { get; set; } = new List<OrderDetalis>();
+        public Guid Number { get; private set; }
+        public DateTime OrderDate { get; private set; } = DateTime.Now;
+        public decimal NettoPrice { get; private set; }
+        public decimal GrossPrice { get; private set; }
+        public Contractor Contractor { get; private set; }
+        public int ContractorId { get; private set; }
+        public virtual List<OrderDetalis> OrderDetalis { get; private set; } = new List<OrderDetalis>();
+
+        public void AddOrderDetalis(OrderDetalis orderDetalis)
+        {
+            OrderDetalis.Add(orderDetalis);
+        }
     }
 }

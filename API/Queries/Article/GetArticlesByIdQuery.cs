@@ -1,13 +1,14 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Queries.Article
+namespace API.Queries
 {
-    public class GetArticlesByIdQuery:IRequest<ArticleDto>
+    public class GetArticlesByIdQuery : IRequest<ArticleDto>
     {
         public int Id { get; set; }
         public GetArticlesByIdQuery(int id)
@@ -17,25 +18,26 @@ namespace API.Queries.Article
     }
     public class GetArticlesQueryByIdHandler : IRequestHandler<GetArticlesByIdQuery, ArticleDto>
     {
-        private IArticleService _articleService;
+        private readonly IRepository<Article> _articleRepository;
+        private readonly IMapper _mapper;
 
-        public GetArticlesQueryByIdHandler(IArticleService articleService)
+        public GetArticlesQueryByIdHandler(IRepository<Article> articleRepository, IMapper mapper)
         {
-            _articleService = articleService;
+            _articleRepository = articleRepository;
+            _mapper = mapper;
         }
 
         public async Task<ArticleDto> Handle(GetArticlesByIdQuery request, CancellationToken cancellationToken)
         {
-        
             try
             {
-                return await _articleService.Get(request.Id,cancellationToken);
+                return _mapper.Map<ArticleDto>(await _articleRepository.Get(request.Id, cancellationToken));
             }
             catch
             {
             }
             finally
-            { 
+            {
             }
             return new ArticleDto(); ;
         }

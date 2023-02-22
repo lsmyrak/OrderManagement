@@ -30,7 +30,7 @@ namespace API.Repositories
 
         public async Task<Contractor> Get(int id, CancellationToken cancellationToken)
         {
-            var contractor = await _context.Contractor.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false,cancellationToken);
+            var contractor = await _context.Contractor.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false, cancellationToken);
             if (contractor == null)
             {
                 return new Contractor();
@@ -60,7 +60,7 @@ namespace API.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task Update(Contractor entity,CancellationToken cancellationToken)
+        public async Task Update(Contractor entity, CancellationToken cancellationToken)
         {
             _context.Contractor.Update(entity);
             await _context.SaveChangesAsync(cancellationToken);

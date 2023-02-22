@@ -1,11 +1,12 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace API.Commands.Article
+namespace API.Commands
 {
     public class UpdateArticleCommand : IRequest<int>
     {
@@ -18,16 +19,17 @@ namespace API.Commands.Article
 
     public class UpdateArticleCommandHandler : IRequestHandler<UpdateArticleCommand, int>
     {
-        private readonly IArticleService _articleService;
-
-        public UpdateArticleCommandHandler(IArticleService articleService)
+        private readonly IRepository<Article> _articleRepository;
+        private readonly IMapper _mapper;
+        public UpdateArticleCommandHandler(IRepository<Article> articleRepository, IMapper mapper)
         {
-            _articleService = articleService;
+            _articleRepository = articleRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> Handle(UpdateArticleCommand request, CancellationToken cancellationToken)
         {
-            await _articleService.Update(request.Model, cancellationToken);
+            await _articleRepository.Update(_mapper.Map<Article>(request.Model), cancellationToken);
 
             return 0;
         }

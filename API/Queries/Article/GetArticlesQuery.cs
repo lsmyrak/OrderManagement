@@ -1,38 +1,34 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Queries.Article
+namespace API.Queries
 {
-    public class GetArticlesQuery:IRequest<IEnumerable<ArticleDto>>
+    public class GetArticlesQuery : IRequest<IEnumerable<ArticleDto>>
     {
     }
     public class GetArticlesQueryHandler : IRequestHandler<GetArticlesQuery, IEnumerable<ArticleDto>>
     {
-        private IArticleService _articleService;
+        private readonly IRepository<Article> _articleRepository;
+        private readonly IMapper _mapper;
 
-        public GetArticlesQueryHandler(IArticleService articleService)
+        public GetArticlesQueryHandler(IRepository<Article> articleRepository, IMapper mapper)
         {
-            _articleService = articleService;
+            _articleRepository = articleRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ArticleDto>> Handle(GetArticlesQuery request, CancellationToken cancellationToken)
         {
-         var list = new List<ArticleDto>();
-            try
-            {
-                return await _articleService.GetAll(cancellationToken);
-            }
-            catch
-            {
-            }
-            finally
-            { 
-            }
-            return list;
+            var articles = await _articleRepository.GetAll(cancellationToken);
+            return articles.Select(x => _mapper.Map<ArticleDto>(x));
+
         }
     }
 }

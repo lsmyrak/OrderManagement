@@ -1,15 +1,8 @@
 ﻿using API.Commands;
-using API.Commands.Article;
-using API.Commands.Contractor;
-using API.Queries.Article;
-using API.Queries.Contractor;
-using API.Queries.Order;
-using API.Services.Interfaces;
+using API.Queries;
 using Contracts.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,7 +30,7 @@ namespace API.Controllers.Contractor
             return _mediator.Send(new GetContractorByIdQuery(id));
         }
 
-        [HttpGet("filtr/{filtr}")]
+        [HttpGet("{filtr}")]
         public async Task<IEnumerable<ContractorDto>> ContractorByFiltr(string filtr)
         {
             return await _mediator.Send(new GetContractorByFilterQuery(filtr));

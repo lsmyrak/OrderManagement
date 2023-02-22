@@ -1,10 +1,12 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Commands.Article
+namespace API.Commands
 {
     public class AddArticleCommand : IRequest<int>
     {
@@ -18,10 +20,12 @@ namespace API.Commands.Article
 
     public class AddArticvleCommandHandler : IRequestHandler<AddArticleCommand, int>
     {
-        private readonly IArticleService _articleService;
-        public AddArticvleCommandHandler(IArticleService articleService)
+        private readonly IRepository<Article> _articleRepository;
+        private readonly IMapper _mapper;
+        public AddArticvleCommandHandler(IRepository<Article> articleRepository, IMapper mapper)
         {
-            _articleService = articleService;
+            _articleRepository = articleRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> Handle(AddArticleCommand request, CancellationToken cancellationToken)
@@ -31,7 +35,7 @@ namespace API.Commands.Article
             {
                 return 1;
             }
-            await _articleService.Add(model,cancellationToken);
+            await _articleRepository.Insert(_mapper.Map<Article>(model), cancellationToken);
             return 0;
         }
     }

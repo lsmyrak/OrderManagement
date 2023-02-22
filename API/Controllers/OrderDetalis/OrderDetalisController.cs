@@ -1,16 +1,8 @@
 ﻿using API.Commands;
-using API.Commands.Article;
-using API.Commands.Contractor;
-using API.Commands.Order;
-using API.Commands.OrderDetalis;
-using API.Queries.Article;
-using API.Queries.Order;
-using API.Queries.OrderDetalis;
+using API.Queries;
 using Contracts.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

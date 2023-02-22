@@ -1,11 +1,14 @@
-﻿using API.Services.Interfaces;
+﻿using API.Repositories;
+using AutoMapper;
 using Contracts.Dtos;
+using Domain.Model;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace API.Queries.Contractor
+namespace API.Queries
 {
     public class GetContractorByFilterQuery : IRequest<IEnumerable<ContractorDto>>
     {
@@ -17,15 +20,19 @@ namespace API.Queries.Contractor
     }
     public class GetContractorByFilterQueryHandler : IRequestHandler<GetContractorByFilterQuery, IEnumerable<ContractorDto>>
     {
-        private readonly IContractorService _contractorService;
-        public GetContractorByFilterQueryHandler(IContractorService contractorService)
-        {
-            _contractorService = contractorService;
-        }
+        private readonly IRepository<Contractor> _contractorRepository;
+        private readonly IMapper _mapper;
 
+        public GetContractorByFilterQueryHandler(IRepository<Contractor> contractorRepository, IMapper mapper)
+        {
+            _contractorRepository = contractorRepository;
+            _mapper = mapper;
+
+        }
         public async Task<IEnumerable<ContractorDto>> Handle(GetContractorByFilterQuery request, CancellationToken cancellationToken)
         {
-            return await _contractorService.GetByFilter(request.Filtr, cancellationToken);
+            var contractors = await _contractorRepository.GetBy(x => x.City.Contains(request.Filtr) || x.Name.Contains(request.Filtr), cancellationToken);
+            return contractors.Select(x => _mapper.Map<ContractorDto>(x));
         }
     }
 }
