@@ -22,6 +22,8 @@ namespace Infrastructure
         public DbSet<Article> Article { get; set; }
         public DbSet<Contractor> Contractor { get; set; }
         public DbSet<OrderDetalis> OrderDetalis { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
