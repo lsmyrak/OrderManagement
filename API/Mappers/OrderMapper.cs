@@ -20,6 +20,16 @@ namespace API.Mappers
             CreateMap<OrderDetalis, OrderDetalisDto>();
             CreateMap<OrderDetalisDto, OrderDetalis>();
 
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
+            
+            CreateMap<User,LoginDto>();
+            CreateMap<LoginDto, User>();
+
+            CreateMap<User, RegisterDto>();
+            CreateMap<RegisterDto, User>();
+
+
         }
     }
 }

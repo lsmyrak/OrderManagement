@@ -1,7 +1,10 @@
 ﻿using API.Mappers;
 using API.Repositories;
+using API.Services;
 using Autofac;
 using AutoMapper;
+using Contracts.Dtos;
+using Microsoft.AspNetCore.Identity;
 
 namespace API
 {
@@ -16,8 +19,10 @@ namespace API
             builder.RegisterType<OrderDetalisRepository>().AsImplementedInterfaces();
             builder.RegisterType<ArticleRepository>().AsImplementedInterfaces();
             builder.RegisterType<ContractorRepository>().AsImplementedInterfaces();
-
-
+            builder.RegisterType<RoleRepository>().AsImplementedInterfaces();
+            builder.RegisterType<UserRepository>().AsImplementedInterfaces();
+            builder.RegisterType<AccountService>().AsImplementedInterfaces();
+            builder.RegisterType<PasswordHasher<RegisterDto>>().AsImplementedInterfaces();        
         }
     }
 }

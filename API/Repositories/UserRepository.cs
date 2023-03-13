@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.ExceptionServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -71,7 +70,7 @@ namespace API.Repositories
 
         public async Task<User> GetUserByEmail(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Email.Contains(email));
+            return await _context.Users.Include(p=>p.UserRole).FirstOrDefaultAsync(x => x.Email.Contains(email));
         }
 
         public async Task Insert(User entity, CancellationToken cancellationToken = default)

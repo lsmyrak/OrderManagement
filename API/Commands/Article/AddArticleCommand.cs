@@ -18,11 +18,11 @@ namespace API.Commands
         }
     }
 
-    public class AddArticvleCommandHandler : IRequestHandler<AddArticleCommand, int>
+    public class AddArticleCommandHandler : IRequestHandler<AddArticleCommand, int>
     {
         private readonly IRepository<Article> _articleRepository;
         private readonly IMapper _mapper;
-        public AddArticvleCommandHandler(IRepository<Article> articleRepository, IMapper mapper)
+        public AddArticleCommandHandler(IRepository<Article> articleRepository, IMapper mapper)
         {
             _articleRepository = articleRepository;
             _mapper = mapper;

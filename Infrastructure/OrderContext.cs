@@ -69,6 +69,9 @@ namespace Infrastructure
             {
                 orderdetalis.HasOne(a => a.Article).WithMany(a => a.OrderDetalis).HasForeignKey(a => a.ArticleId);
             });
+
+            modelBuilder.Entity<User>(user => user.HasOne(role => role.UserRole));
+
             base.OnModelCreating(modelBuilder);
         }
     }

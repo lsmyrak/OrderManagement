@@ -8,12 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 namespace API
 {
     public class Startup
@@ -28,56 +30,77 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var authenticationSetting = new AuthenticationSetting();
+
+            Configuration.GetSection("Authentication").Bind(authenticationSetting);
+            services.AddSingleton(authenticationSetting);
+            services.AddAuthentication(option =>
+              {
+                  option.DefaultAuthenticateScheme = "Bearer";
+                  option.DefaultScheme = "Bearer";
+                  option.DefaultChallengeScheme = "Bearer";
+              }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authenticationSetting.JwtIssuer,
+                    ValidAudience = authenticationSetting.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSetting.JwtKey))
+                };
+            });
+
 
             services.AddControllers();
-            services.AddDbContext<OrderContext>(options => options
-                .UseNpgsql(Configuration.GetConnectionString("OrderPostgreSql")).UseSnakeCaseNamingConvention()
-                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
-                .EnableSensitiveDataLogging());
-            services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddMediatR(typeof(Startup));
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
-        }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            var solutionAssemblies = Directory.GetFiles(
-            AppDomain.CurrentDomain.BaseDirectory,
-            "API*.dll")
-            .Select(Assembly.LoadFrom);
-
-            foreach (var assembly in solutionAssemblies)
-            {
-                builder.RegisterAssemblyModules(assembly);
+                services.AddDbContext<OrderContext>(options => options
+                    .UseNpgsql(Configuration.GetConnectionString("OrderPostgreSql")).UseSnakeCaseNamingConvention()
+                    .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                    .EnableSensitiveDataLogging());
+                services.AddDatabaseDeveloperPageExceptionFilter();
+                services.AddMediatR(typeof(Startup));
+                services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+                });
             }
-        }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
+
+            public void ConfigureContainer(ContainerBuilder builder)
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+                var solutionAssemblies = Directory.GetFiles(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "API*.dll")
+                .Select(Assembly.LoadFrom);
+
+                foreach (var assembly in solutionAssemblies)
+                {
+                    builder.RegisterAssemblyModules(assembly);
+                }
             }
-            //  app.Use
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-
-
-            app.UseEndpoints(endpoints =>
+            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-            });
+                if (env.IsDevelopment())
+                {
+                    app.UseDeveloperExceptionPage();
+                    app.UseSwagger();
+                    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+                }
+                //  app.Use
+                app.UseHttpsRedirection();
+
+                app.UseRouting();
+
+                app.UseAuthorization();
+
+
+
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller}/{action=Index}/{id?}");
+                });
+            }
         }
     }
-}

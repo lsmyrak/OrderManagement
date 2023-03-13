@@ -3,8 +3,12 @@ using AutoMapper;
 using Contracts.Dtos;
 using Domain.Model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace API.Services
@@ -17,12 +21,13 @@ namespace API.Services
         private readonly IRepository<Role> _roleRepository;
         private readonly AuthenticationSetting _authenticationSetting;
 
-        public AccountService(IMapper mapper,IPasswordHasher<RegisterDto> passwordHasher, IUserRepository userRepository,IRepository<Role> roleRepositroy)
+        public AccountService(IMapper mapper, IPasswordHasher<RegisterDto> passwordHasher, IUserRepository userRepository, IRepository<Role> roleRepositroy,AuthenticationSetting authenticationSetting)
         {
-            _mapper= mapper; 
-            _passwordHasher= passwordHasher;
-            _userRepository= userRepository;
-            _roleRepository= roleRepositroy;
+            _mapper = mapper;
+            _passwordHasher = passwordHasher;
+            _userRepository = userRepository;
+            _roleRepository = roleRepositroy;
+            _authenticationSetting = authenticationSetting;
         }
 
         public Task<RoleDto> GetRoleById(Guid id)
@@ -37,7 +42,7 @@ namespace API.Services
 
         public async Task<UserDto> GetUserByEmail(string email)
         {
-            var user = await  _userRepository.GetUserByEmail(email);
+            var user = await _userRepository.GetUserByEmail(email);
             return _mapper.Map<UserDto>(user);
         }
 
@@ -54,14 +59,46 @@ namespace API.Services
             await _userRepository.Delete(userDto.Id);
         }
 
-        public Task UpdateAccount(UserDto userdto)
+        public async Task UpdateAccount(UserDto userdto)
         {
-            throw new NotImplementedException();
+            await _userRepository.Update(_mapper.Map<User>(userdto));
         }
 
-        public Task<string> ValidateUser(LoginDto loginDto)
+        public async Task<string> ValidateUser(LoginDto loginDto)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetUserByEmail(loginDto.Email);
+            {
+                if (user == null)
+                {
+                    throw new BadRequestException("Invalid user or password");
+                }
+
+                var registerUser = _mapper.Map<RegisterDto>(user);
+                var result = _passwordHasher.VerifyHashedPassword(registerUser, registerUser.Password, loginDto.Password);
+
+                if (result == PasswordVerificationResult.Failed)
+                {
+                    throw new BadRequestException("Invalid email or password");
+                }
+                var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier,user.Email.ToString()),
+                new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}"),
+                new Claim(ClaimTypes.Role,user.UserRole.Name)
+            };
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSetting.JwtKey));
+                var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var expires = DateTime.Now.AddDays(_authenticationSetting.JwtExpireDays);
+                var token = new JwtSecurityToken(
+                    _authenticationSetting.JwtIssuer,
+                    _authenticationSetting.JwtIssuer,
+                    claims,
+                    expires: expires, signingCredentials: cred);
+                var tokenHandlewr = new JwtSecurityTokenHandler();
+
+                return tokenHandlewr.WriteToken(token);
+            }
         }
     }
 }
